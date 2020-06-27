@@ -17,7 +17,7 @@ namespace ProductCatalogAPI.Data
         public DbSet<CatalogBrand> CatalogBrands { get; set; }
         public DbSet<CatalogItem> CatalogItems { get; set; }
 
-       protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
        {
             modelBuilder.Entity<CatalogBrand>(e =>
             {
