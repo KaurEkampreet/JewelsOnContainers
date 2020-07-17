@@ -4,14 +4,49 @@ networks:
   frontend:
   backend:
 
-
 services:
   catalog:
-  image: jewels/catalogapi
-  build:
-   context: .\ProductCatalogAPI
-   dockerfile: Dockerfile
-  environment:
-   ExternalCatalogBaseUrl: http://localhost:6810
+    image: jewels/catalogapi
+    build:
+      context: .\ProductCatalogAPI
+      dockerfile: Dockerfile
+    environment:
+      ExternalCatalogBaseUrl: http://localhost:6810
+      DatabaseServer: mssqlserver
+      DatabaseName: CatalogDb
+      DatabaseUser: sa
+      DatabasePassword: ProductApi(!)
     ports:
       - "6810:80"
+    container_name: jewelscatalogapi
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - mssqlserver
+
+  webmvc:
+    image: jewels/webmvc
+    build:
+      context: .\WebMvc
+      dockerfile: Dockerfile
+    environment:
+      CatalogUrl: http://catalog
+    ports:
+      - "6811:80"
+    container_name: webshop
+    networks:
+      - frontend
+    depends_on:
+      - catalog
+
+  mssqlserver:
+    image: "microsoft/mssql-server-linux:latest"
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: ProductApi(!)
+    ports:
+      - "1448:1433"
+    container_name: jewelssqlserver
+    networks:
+      - backend
