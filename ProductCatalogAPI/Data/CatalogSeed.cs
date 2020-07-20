@@ -26,7 +26,9 @@ namespace ProductCatalogAPI.Data
             {
                 catalogContext.CatalogItems.AddRange(GetCatalogItems());
                 catalogContext.SaveChanges();
+
             }
+
         }
 
         private static IEnumerable<CatalogBrand> GetCatalogBrands()
@@ -45,16 +47,17 @@ namespace ProductCatalogAPI.Data
                 {
                     Brand="Graff"
                 }
-
             };
+
         }
+
         private static IEnumerable<CatalogType> GetCatalogTypes()
         {
             return new List<CatalogType>
             {
                 new CatalogType
                 {
-                    Type = "Engagement Ring."
+                    Type = "Engagement Ring"
                 },
                 new CatalogType
                 {
@@ -64,12 +67,13 @@ namespace ProductCatalogAPI.Data
                 {
                     Type="Fashion Ring"
                 }
-
             };
+
         }
+
         private static IEnumerable<CatalogItem> GetCatalogItems()
         {
-            return new List<CatalogItem>
+            return new List<CatalogItem>()
             {
                 new CatalogItem { CatalogTypeId = 2, CatalogBrandId = 3, Description = "A ring that has been around for over 100 years", Name = "World Star", Price = 199.5M, PictureUrl = "http://externalcatalogbaseurltobereplaced/api/pic/1" },
                 new CatalogItem { CatalogTypeId = 1, CatalogBrandId = 2, Description = "will make you world champions", Name = "White Line", Price = 88.50M, PictureUrl = "http://externalcatalogbaseurltobereplaced/api/pic/2" },
@@ -86,7 +90,6 @@ namespace ProductCatalogAPI.Data
                 new CatalogItem { CatalogTypeId = 3, CatalogBrandId = 3, Description = "You ar ethe star", Name = "Elequent", Price = 123, PictureUrl = "http://externalcatalogbaseurltobereplaced/api/pic/13" },
                 new CatalogItem { CatalogTypeId = 3, CatalogBrandId = 2, Description = "A ring popular in the 16th and 17th century in Western Europe that was used as an engagement wedding ring", Name = "London Star", Price = 218.5M, PictureUrl = "http://externalcatalogbaseurltobereplaced/api/pic/14" },
                 new CatalogItem { CatalogTypeId = 3, CatalogBrandId = 1, Description = "A floppy, bendable ring made out of links of metal", Name = "Paris Blues", Price = 312, PictureUrl = "http://externalcatalogbaseurltobereplaced/api/pic/15" }
-
             };
         }
     }

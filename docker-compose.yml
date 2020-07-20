@@ -47,6 +47,6 @@ services:
       SA_PASSWORD: ProductApi(!)
     ports:
       - "1448:1433"
-    container_name: jewelssqlserver
+    container_name: jewelssqlservernew
     networks:
       - backend

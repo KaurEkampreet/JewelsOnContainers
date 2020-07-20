@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ProductCatalogAPI.Data;
@@ -27,17 +26,16 @@ namespace ProductCatalogAPI.Controllers
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Items(
-           [FromQuery] int pageIndex = 0,
-           [FromQuery] int pageSize = 6)
-        { 
-            // return total count in db
+            [FromQuery] int pageIndex = 0,
+            [FromQuery] int pageSize = 6)
+        {
             var itemsCount = _context.CatalogItems.LongCountAsync();
 
             var items = await _context.CatalogItems
-                 .OrderBy(c => c.Name)
-                 .Skip(pageIndex * pageSize)
-                 .Take(pageSize)
-                 .ToListAsync();
+                            .OrderBy(c => c.Name)
+                            .Skip(pageIndex * pageSize)
+                            .Take(pageSize)
+                            .ToListAsync();
 
             items = ChangePictureUrl(items);
 
@@ -48,15 +46,16 @@ namespace ProductCatalogAPI.Controllers
                 Count = itemsCount.Result,
                 Data = items
             };
+
             return Ok(model);
         }
 
         private List<CatalogItem> ChangePictureUrl(List<CatalogItem> items)
         {
             items.ForEach(item =>
-            item.PictureUrl = item.PictureUrl.Replace(
-                "http://externalcatalogbaseurltobereplaced",
-                _config["ExternalCatalogBaseUrl"]));
+                item.PictureUrl = item.PictureUrl.Replace(
+                                    "http://externalcatalogbaseurltobereplaced",
+                                    _config["ExternalCatalogBaseUrl"]));
             return items;
         }
 
@@ -74,7 +73,6 @@ namespace ProductCatalogAPI.Controllers
         {
             var brands = await _context.CatalogBrands.ToListAsync();
             return Ok(brands);
-
         }
 
         [HttpGet("[action]/type/{catalogTypeId}/brand/{catalogBrandId}")]
@@ -82,9 +80,9 @@ namespace ProductCatalogAPI.Controllers
             int? catalogTypeId,
             int? catalogBrandId,
             [FromQuery] int pageIndex = 0,
-           [FromQuery] int pageSize = 6
-           )
-       {
+            [FromQuery] int pageSize = 6
+            )
+        {
             var query = (IQueryable<CatalogItem>)_context.CatalogItems;
 
             if (catalogTypeId.HasValue)
@@ -96,13 +94,15 @@ namespace ProductCatalogAPI.Controllers
             {
                 query = query.Where(c => c.CatalogBrandId == catalogBrandId);
             }
+
             var itemsCount = query.LongCountAsync();
 
-             var items = await query
+            var items = await query
                             .OrderBy(c => c.Name)
                             .Skip(pageIndex * pageSize)
                             .Take(pageSize)
                             .ToListAsync();
+
             items = ChangePictureUrl(items);
 
             var model = new PaginatedItemsViewModel<CatalogItem>
@@ -112,6 +112,7 @@ namespace ProductCatalogAPI.Controllers
                 Count = itemsCount.Result,
                 Data = items
             };
+
             return Ok(model);
         }
     }

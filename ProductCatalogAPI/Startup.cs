@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using ProductCatalogAPI.Data;
 
 namespace ProductCatalogAPI
@@ -34,9 +32,9 @@ namespace ProductCatalogAPI
             var databaseName = Configuration["DatabaseName"];
             var databaseUser = Configuration["DatabaseUser"];
             var password = Configuration["DatabasePassword"];
-            var connectionString = $"Server={databaseServer};Database={databaseName};User Id={databaseUser}; Password={password}";
+            var connectionString = $"Server={databaseServer};Database={databaseName};User Id={databaseUser};Password={password}";
             services.AddDbContext<CatalogContext>(options =>
-            options.UseSqlServer(connectionString)
+                options.UseSqlServer(connectionString)
             );
 
             services.AddSwaggerGen(options =>
@@ -47,6 +45,7 @@ namespace ProductCatalogAPI
                     Version = "v1",
                     Description = "Product catalog microservice"
                 });
+
             });
         }
 
@@ -67,7 +66,7 @@ namespace ProductCatalogAPI
             app.UseSwagger()
                 .UseSwaggerUI(e =>
                 {
-                    e.SwaggerEndpoint("/swagger/v1/swagger.json", "ProductCatalogAPI, V1");
+                    e.SwaggerEndpoint("/swagger/v1/swagger.json", "ProductCatalogAPI V1");
                 });
 
             app.UseEndpoints(endpoints =>

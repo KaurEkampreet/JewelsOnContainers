@@ -18,7 +18,7 @@ namespace ProductCatalogAPI.Data
         public DbSet<CatalogItem> CatalogItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-       {
+        {
             modelBuilder.Entity<CatalogBrand>(e =>
             {
                 e.ToTable("CatalogBrands");
@@ -27,44 +27,45 @@ namespace ProductCatalogAPI.Data
                     .UseHiLo("catalog_brand_hilo");
 
                 e.Property(b => b.Brand)
-                .IsRequired()
-                .HasMaxLength(100);
+                    .IsRequired()
+                    .HasMaxLength(100);
+
             });
 
             modelBuilder.Entity<CatalogType>(e =>
             {
                 e.ToTable("CatalogTypes");
                 e.Property(t => t.Id)
-                .IsRequired()
-                .UseHiLo("catalog_types_hilo");
+                    .IsRequired()
+                    .UseHiLo("catalog_types_hilo");
 
                 e.Property(t => t.Type)
-                .IsRequired()
-                .HasMaxLength(100);
+                    .IsRequired()
+                    .HasMaxLength(100);
             });
 
             modelBuilder.Entity<CatalogItem>(e =>
             {
                 e.ToTable("Catalog");
                 e.Property(c => c.Id)
-                .IsRequired()
-                .UseHiLo("catalog_hilo");
+                    .IsRequired()
+                    .UseHiLo("catalog_hilo");
 
                 e.Property(c => c.Name)
-                .IsRequired()
-                .HasMaxLength(100);
+                    .IsRequired()
+                    .HasMaxLength(100);
 
                 e.Property(c => c.Price)
-                .IsRequired();
+                    .IsRequired();
 
                 e.HasOne(c => c.CatalogType)
-                .WithMany()
-                .HasForeignKey(c => c.CatalogTypeId);
+                    .WithMany()
+                    .HasForeignKey(c => c.CatalogTypeId);
 
                 e.HasOne(c => c.CatalogBrand)
-               .WithMany()
-               .HasForeignKey(c => c.CatalogBrandId);
+                    .WithMany()
+                    .HasForeignKey(c => c.CatalogBrandId);
             });
-       }
+        }
     }
 }
