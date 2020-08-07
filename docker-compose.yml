@@ -32,6 +32,8 @@ services:
       dockerfile: Dockerfile
     environment:
       CatalogUrl: http://catalog
+      IdentityUrl: http://172.17.26.225:6700
+      CallBackUrl: http://localhost:6811
     ports:
       - "6811:80"
     container_name: webshop
@@ -40,13 +42,55 @@ services:
     depends_on:
       - catalog
 
+  tokenserver:
+    build:
+      context: .\TokenServiceApi
+      dockerfile: Dockerfile
+    image: jewels/tokenapi
+    environment:
+      Mvcclient: http://localhost:6811
+    ports:
+    - "6700:80"
+    container_name: tokenserviceapi
+    networks:
+      - frontend
+      - backend
+    depends_on:
+     - mssqlserver
+
+  cart:
+    build:
+      context: .\CartApi
+      dockerfile: Dockerfile
+    image: jewels/cartapi
+    environment:
+      IdentityUrl: http://192.168.24.113.6700
+      ConnectionString:
+  ports:
+    - "6812:80"
+  container_name: cartapi
+  networks:
+    -backend
+    -frontend
+  depends_on:
+    -tokenserver
+    -basket.data
+
   mssqlserver:
     image: "microsoft/mssql-server-linux:latest"
     environment:
       ACCEPT_EULA: Y
       SA_PASSWORD: ProductApi(!)
     ports:
-      - "1448:1433"
-    container_name: jewelssqlservernew
+      - "1449:1433"
+    container_name: jewelssqlserver
     networks:
       - backend
+
+  basket.data:
+    image: redis
+    container_name: basketdata
+    ports:
+     - "6080:6379"
+    networks:
+       -backend
